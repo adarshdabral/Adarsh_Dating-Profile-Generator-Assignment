@@ -1,6 +1,6 @@
-# AI-Powered Dating Profile Generator
+# Dating Profile Generator
 
-This project is a web application that assists users in generating personalized dating profile descriptions based on their inputs. It includes a frontend for user interaction and a backend API that generates human-like descriptions.
+This project is a web application that assists users in generating personalized dating profile descriptions based on their inputs. It includes a frontend for user interaction and a backend API that generates profile descriptions.
 
 ## Features
 
