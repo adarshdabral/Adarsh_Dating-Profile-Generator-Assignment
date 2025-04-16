@@ -4,58 +4,68 @@ from pydantic import BaseModel
 from typing import List
 import random
 
+
 app = FastAPI()
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000"],  
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
 
-class AnswersRequest(BaseModel):
-    answers: List[str]
+class UserAnswers(BaseModel):
+    answers: List[str] 
 
+# Test endpoint 
 @app.get("/")
-async def read_root():
-    return {"message": "API is live!"}
+async def check_status():
+    return {"message": "API is up and running!"}
 
+# Endpoint to generate the profile description 
 @app.post("/generate-description")
-async def generate_description(data: AnswersRequest):
-    answers = data.answers
+async def generate_profile_description(user_data: UserAnswers):
+   
+    user_answers = user_data.answers
 
-    intro_phrases = [
-        "Hey there! ",
-        "Looking for someone to vibe with?",
-        "Adventurer by day, Netflix expert by night.",
-        "I may not be a photographer, but I can picture us together "
-    ]
-
-    base_desc = random.choice(intro_phrases) + "\n\n"
-
-    interests = [a.strip() for a in answers if a.strip()]
     
+    opening_lines = [
+        "Hey, what's up! ",
+        "Adventure awaits, let's see where it takes us!",
+        "A passionate wanderer with a love for Netflix. ",
+        "I might not be a pro photographer, but I can totally picture us together "
+    ]
+
+    
+    profile_description = random.choice(opening_lines) + "\n\n"
+
+    
+    interests = [answer.strip() for answer in user_answers if answer.strip()]
+
     if interests:
-        base_desc += "Here's a little about me:\n"
-        for i, interest in enumerate(interests):
-            base_desc += f"• {interest}\n"
-        base_desc += "\n"
+        profile_description += "Here's a bit about me:\n"
+        for idx, interest in enumerate(interests):
+            profile_description += f"• {interest}\n"
+        profile_description += "\n"
 
-    photo_hint = [
-        "Got a few snapshots that say more than words ever could. 📸",
-        "Check out my pics – they tell their own story!",
-        "Swipe through and see the real me.",
-        "Because sometimes a smile in a photo says it all."
+    
+    photo_lines = [
+        "My photos tell a better story than words ever could. ",
+        "Take a look at my pictures – they speak for themselves!",
+        "See the real me through my photos. Take a scroll.",
+        "Sometimes, a photo can say it all. "
     ]
-    base_desc += random.choice(photo_hint) + "\n"
+    profile_description += random.choice(photo_lines) + "\n"
 
-    closing = [
-        "Let’s connect and see where this goes!",
-        "If you're into deep convos and spontaneous plans, hit me up!",
-        "Open to new adventures, genuine vibes, and maybe something amazing."
+    
+    closing_statements = [
+        "Let's see where this goes, shall we?",
+        "If you're into deep conversations and spontaneous adventures, let's chat!",
+        "Looking for new connections and maybe something awesome."
     ]
-    base_desc += "\n" + random.choice(closing)
+    profile_description += "\n" + random.choice(closing_statements)
 
-    return {"description": base_desc.strip()}
+    
+    return {"description": profile_description.strip()}
