@@ -12,13 +12,12 @@ export default function HomePage() {
   const [profileDescription, setProfileDescription] = useState('')
   const [isEditing, setIsEditing] = useState(false)
 
-  // Handle profile description generation
+
   const generateProfileDescription = async () => {
     if (photos.length === 0) return
 
     setIsLoading(true)
 
-    // Convert photos into base64 strings for easy transfer
     const base64Photos = await Promise.all(
       photos.map(photo => new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
@@ -28,7 +27,7 @@ export default function HomePage() {
       }))
     )
 
-    // Preparing the payload for the API request
+   
     const requestBody = {
       answers: answers,
       photos: base64Photos.map((dataUrl, index) => ({
@@ -39,8 +38,7 @@ export default function HomePage() {
 
     try {
       // Send the data to the server
-      // const response = await fetch('http://localhost:8000/generate-description', {
-        const response = await fetch('https://backend-da-8oyk.vercel.app/generate-description', {
+      const response = await fetch('http://localhost:8000/generate-description', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +58,7 @@ export default function HomePage() {
     }
   }
 
-  // Handle the text copy action
+ 
   const copyToClipboard = () => {
     if (profileDescription) {
       navigator.clipboard.writeText(profileDescription)
@@ -68,12 +66,11 @@ export default function HomePage() {
     }
   }
 
-  // Toggle between editing and viewing the description
+
   const toggleEditMode = () => {
     setIsEditing(prev => !prev)
   }
 
-  // Handle changes when editing the description
   const updateDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setProfileDescription(event.target.value)
   }
@@ -83,13 +80,12 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold text-center mb-8">Create Your Perfect Dating Profile</h1>
 
       <div className="space-y-8">
-        {/* Photo Upload Component */}
+
         <PhotoUpload photos={photos} setPhotos={setPhotos} />
 
-        {/* Form to answer questions */}
         <QuestionForm answers={answers} setAnswers={setAnswers} />
 
-        {/* Generate Button */}
+   
         <button
           disabled={photos.length === 0 || isLoading}
           onClick={generateProfileDescription}
@@ -102,12 +98,12 @@ export default function HomePage() {
           {isLoading ? 'Generating Profile...' : 'Generate My Profile'}
         </button>
 
-        {/* Display the generated description if available */}
+        {/* Profile Description */}
         {profileDescription && (
           <div className="mt-8 space-y-6">
             <h2 className="text-2xl font-semibold mb-4">Your Generated Profile Description:</h2>
 
-            {/* Editable description */}
+            {/* Edit */}
             {isEditing ? (
               <textarea
                 className="w-full p-4 border rounded-xl"
@@ -119,7 +115,7 @@ export default function HomePage() {
               <p>{profileDescription}</p>
             )}
 
-            {/* Action Buttons */}
+
             <div className="flex gap-4">
               <button
                 onClick={toggleEditMode}
@@ -127,7 +123,7 @@ export default function HomePage() {
               >
                 {isEditing ? 'Save Changes' : 'Edit Description'}
               </button>
-
+        {/* Copy */}
               <button
                 onClick={copyToClipboard}
                 className="px-4 py-2 bg-green-600 text-white rounded-md"
@@ -136,15 +132,7 @@ export default function HomePage() {
               </button>
             </div>
 
-            {/* Show photo filenames */}
-            {/* <div className="mt-4 text-sm text-gray-600">
-              <p><strong>Photos You Uploaded:</strong></p>
-              <ul>
-                {photos.map((photo, index) => (
-                  <li key={index}>{photo.name}</li>
-                ))}
-              </ul>
-            </div> */}
+          
           </div>
         )}
       </div>
