@@ -47,3 +47,15 @@ This project is a web application that assists users in generating personalized 
 - Answers are optional, but their inclusion significantly improves the quality and personalization of the description.
 - There is no user authentication or persistent storage in this application.
 
+## Run the Frontend
+-cd frontend
+-npm install
+-npm run dev
+
+## Run the backend
+-cd backend
+-python -m venv venv
+-venv\Scripts\activate
+-pip install -r requirements.txt
+-uvicorn main:app --reload
+
